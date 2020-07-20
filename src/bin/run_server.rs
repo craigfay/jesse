@@ -43,4 +43,3 @@ mod tests {
         assert_eq!(&body[..], b"Hello World!");
     }
 }
-
