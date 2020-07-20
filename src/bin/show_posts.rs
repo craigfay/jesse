@@ -1,9 +1,8 @@
 extern crate diesel;
-//extern crate diesel_demo_step_1_pg;
+extern crate rust_json_api;
 
 use rust_json_api::models::*;
 use diesel::prelude::*;
-//use diesel_demo_step_1_pg::*;
 
 fn main() {
     use rust_json_api::schema::posts::dsl::*;
