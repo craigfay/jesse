@@ -16,8 +16,8 @@ pub fn establish_connection() -> SqliteConnection {
 }
 
 
-
-pub fn create_post<'a>(conn: &SqliteConnection, title: &'a str, body: &'a str) {
+pub fn create_post<'a>(title: &'a str, body: &'a str) {
+    let connection = establish_connection();
 
     let new_post = models::NewPost {
         title: title,
@@ -26,6 +26,15 @@ pub fn create_post<'a>(conn: &SqliteConnection, title: &'a str, body: &'a str) {
 
     diesel::insert_into(schema::posts::table)
         .values(&new_post)
-        .execute(conn)
+        .execute(&connection)
         .expect("Error saving new post");
 }
+
+pub fn read_posts() -> Vec<models::Post> {
+    let connection = establish_connection();
+    schema::posts::table
+        .limit(5)
+        .load::<models::Post>(&connection)
+        .expect("Error loading posts")
+}
+
