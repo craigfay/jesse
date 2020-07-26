@@ -8,5 +8,7 @@ edition = "2018"
 
 [dependencies]
 gotham = "0.4.0"
-diesel = { version = "1.4.4", features = ["postgres"] }
+chrono = { version = "0.4.0", features = ["serde"] }
+diesel = { version = "1.4.4", features = ["sqlite", "serde_json", "chrono"] }
+serde = { version = "1.0", features = ["derive"] }
 dotenv = "0.15.0"

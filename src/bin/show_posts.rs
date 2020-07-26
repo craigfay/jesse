@@ -1,12 +1,12 @@
 extern crate diesel;
 extern crate rust_json_api;
 
-use rust_json_api::models::*;
+use rust_json_api::db::models::*;
 use diesel::prelude::*;
 
 fn main() {
-    use rust_json_api::schema::posts::dsl::*;
-    use rust_json_api::establish_connection;
+    use rust_json_api::db::schema::posts::dsl::*;
+    use rust_json_api::db::establish_connection;
 
     let connection = establish_connection();
     let results = posts

@@ -1,7 +1,7 @@
 extern crate rust_json_api;
 extern crate diesel;
 
-use self::rust_json_api::*;
+use self::rust_json_api::db*;
 use std::io::{stdin, Read};
 
 fn main() {

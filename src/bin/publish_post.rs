@@ -2,8 +2,8 @@ extern crate rust_json_api;
 extern crate diesel;
 
 use self::diesel::prelude::*;
-use self::rust_json_api::*;
-use self::models::Post;
+use self::rust_json_api::db::*;
+use self::db::models::Post;
 use std::env::args;
 
 fn main() {
