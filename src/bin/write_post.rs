@@ -1,7 +1,7 @@
 extern crate rust_json_api;
 extern crate diesel;
 
-use self::rust_json_api::db*;
+use self::rust_json_api::db::*;
 use std::io::{stdin, Read};
 
 fn main() {
@@ -16,7 +16,7 @@ fn main() {
     stdin().read_to_string(&mut body).unwrap();
 
     let post = create_post(&connection, title, &body);
-    println!("\nSaved draft {} with id {}", title, post.id);
+    println!("Saved draft!");
 }
 
 #[cfg(not(windows))]
