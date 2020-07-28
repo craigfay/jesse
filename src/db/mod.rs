@@ -30,12 +30,16 @@ pub fn create_post<'a>(title: &'a str, body: &'a str) {
         .expect("Error saving new post");
 }
 
-pub fn read_post(id: i32) -> models::Post {
+pub fn read_post(id: i32) -> Option<models::Post> {
     let connection = establish_connection();
-    schema::posts::table
+    let result = schema::posts::table
         .find(id)
-        .first::<models::Post>(&connection)
-        .expect("Error loading post")
+        .first::<models::Post>(&connection);
+    
+    match result {
+        Err(_e) => None,
+        Ok(post) => Some(post),
+    }
 }
 
 pub fn read_posts() -> Vec<models::Post> {
@@ -45,4 +49,5 @@ pub fn read_posts() -> Vec<models::Post> {
         .load::<models::Post>(&connection)
         .expect("Error loading posts")
 }
+
 
