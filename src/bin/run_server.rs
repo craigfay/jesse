@@ -52,7 +52,7 @@ async fn read_posts_handler() -> impl Responder {
         data: Some(posts),
         errors: vec![],
     };
-    let json = serde_json::to_string_pretty(&response).unwrap();
+    let json = serde_json::to_string(&response).unwrap();
     format!("{}", json)
 }
 
