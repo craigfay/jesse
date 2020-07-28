@@ -22,6 +22,12 @@ async fn read_post_handler(params: web::Path<Params>) -> impl Responder {
     format!("{}", json)
 }
 
+async fn read_posts_handler() -> impl Responder {
+    let posts = db::read_posts();
+    let json = serde_json::to_string_pretty(&posts).unwrap();
+    format!("{}", json)
+}
+
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
     let addr = "127.0.0.1:8000";
@@ -31,6 +37,8 @@ async fn main() -> std::io::Result<()> {
         App::new().service(
 
             web::scope("/api")
+                .route("/posts.json",
+                    web::get().to(read_posts_handler))
                 .route("/posts/{id}.json",
                     web::get().to(read_post_handler))
         )
