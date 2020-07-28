@@ -57,16 +57,8 @@ async fn read_posts_handler() -> impl Responder {
 }
 
 async fn create_posts_handler(data: web::Json<db::models::NewPost>) -> impl Responder {
-
-    // TODO make properties borrow-able if possible
-    // TODO make construction generic
-    let new_post = db::models::NewPost {
-        title: data.title.to_string(),
-        body: data.body.to_string(),
-    };
-    
     // TODO return the new record if possible
-    let _result = db::create_post(&new_post);
+    let _result = db::create_post(&data);
     let response = RestResponse::<db::models::NewPost> {
         data: Some(new_post),
         errors: vec![],
