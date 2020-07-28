@@ -14,6 +14,11 @@ struct Params {
     id: i32,
 }
 
+struct RestResponse<M> {
+    data: Option<M>,
+    error: Option<String>,
+}
+
 
 async fn read_post_handler(params: web::Path<Params>) -> impl Responder {
     let id = params.id;
@@ -21,7 +26,11 @@ async fn read_post_handler(params: web::Path<Params>) -> impl Responder {
     match post {
         None => format("Not Found"),
         Some(post) => {
-            let json = serde_json::to_string_pretty(&post).unwrap();
+            let response = RestResponse<db::models::Post> {
+                data: Some(post),
+                errors: None,
+            };
+            let json = serde_json::to_string_pretty(&response).unwrap();
             format!("{}", json)
         }
     }

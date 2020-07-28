@@ -15,12 +15,37 @@ struct Params {
 }
 
 
+#[derive(Serialize)]
+struct RestResponse<M> {
+    data: Option<M>,
+    errors: Vec<String>,
+}
+
+
 async fn read_post_handler(params: web::Path<Params>) -> impl Responder {
     let id = params.id;
     let post = db::read_post(id);
-    let json = serde_json::to_string_pretty(&post).unwrap();
-    format!("{}", json)
+    match post {
+        None => {
+            let response = RestResponse::<db::models::Post> {
+                data: None,
+                errors: vec!["Not Found".to_string()],
+            };
+            let json = serde_json::to_string_pretty(&response).unwrap();
+            format!("{}", json)
+        }
+        Some(post) => {
+            let response = RestResponse::<db::models::Post> {
+                data: Some(post),
+                errors: vec![],
+            };
+            let json = serde_json::to_string_pretty(&response).unwrap();
+            format!("{}", json)
+        }
+    }
+
 }
+
 
 async fn read_posts_handler() -> impl Responder {
     let posts = db::read_posts();
