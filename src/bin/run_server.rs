@@ -6,12 +6,18 @@ use gotham::router::Router;
 use gotham::router::builder::*;
 use gotham::state::State;
 
-use rust_json_api::db::read_posts;
+use rust_json_api::db;
 use serde_json;
 
 
+pub fn read_post_handler(state: State) -> (State, String) {
+    let post = db::read_post(1);
+    let json = serde_json::to_string_pretty(&post).unwrap();
+    (state, json.to_string())
+}
+
 pub fn read_posts_handler(state: State) -> (State, String) {
-    let posts = read_posts();
+    let posts = db::read_posts();
     let json = serde_json::to_string_pretty(&posts).unwrap();
     (state, json.to_string())
 }
@@ -22,6 +28,10 @@ fn router() -> Router {
             route
                 .get("/posts.json")
                 .to(read_posts_handler);
+
+            route
+                .get("/posts/:id.json")
+                .to(read_post_handler);
         });
     })
 }

@@ -30,6 +30,14 @@ pub fn create_post<'a>(title: &'a str, body: &'a str) {
         .expect("Error saving new post");
 }
 
+pub fn read_post(id: i32) -> models::Post {
+    let connection = establish_connection();
+    schema::posts::table
+        .find(id)
+        .first::<models::Post>(&connection)
+        .expect("Error loading post")
+}
+
 pub fn read_posts() -> Vec<models::Post> {
     let connection = establish_connection();
     schema::posts::table
