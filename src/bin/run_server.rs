@@ -56,6 +56,27 @@ async fn read_posts_handler() -> impl Responder {
     format!("{}", json)
 }
 
+async fn create_posts_handler(data: web::Json<db::models::NewPost>) -> impl Responder {
+
+    // TODO make properties borrow-able if possible
+    // TODO make construction generic
+    let new_post = db::models::NewPost {
+        title: data.title.to_string(),
+        body: data.body.to_string(),
+    };
+    
+    // TODO return the new record if possible
+    let _result = db::create_post(&new_post);
+    let response = RestResponse::<db::models::NewPost> {
+        data: Some(new_post),
+        errors: vec![],
+    };
+
+    // TODO set "Content-Type" header
+    let json = serde_json::to_string(&response).unwrap();
+    format!("{}", json)
+}
+
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
     let addr = "127.0.0.1:8000";
@@ -69,6 +90,8 @@ async fn main() -> std::io::Result<()> {
                     web::get().to(read_posts_handler))
                 .route("/posts/{id}.json",
                     web::get().to(read_post_handler))
+                .route("/posts.json",
+                    web::post().to(create_posts_handler))
         )
 
     })

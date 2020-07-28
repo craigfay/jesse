@@ -15,19 +15,12 @@ pub fn establish_connection() -> SqliteConnection {
         .unwrap_or_else(|_| panic!("Error connecting to {}", db))
 }
 
-
-pub fn create_post<'a>(title: &'a str, body: &'a str) {
+pub fn create_post(new_post: &models::NewPost) {
     let connection = establish_connection();
 
-    let new_post = models::NewPost {
-        title: title,
-        body: body,
-    };
-
     diesel::insert_into(schema::posts::table)
-        .values(&new_post)
-        .execute(&connection)
-        .expect("Error saving new post");
+        .values(new_post)
+        .execute(&connection);
 }
 
 pub fn read_post(id: i32) -> Option<models::Post> {
