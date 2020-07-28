@@ -17,7 +17,9 @@ struct Params {
 
 async fn read_post_handler(params: web::Path<Params>) -> impl Responder {
     let id = params.id;
-    format!("Hello {}!", id)
+    let post = db::read_post(id);
+    let json = serde_json::to_string_pretty(&post).unwrap();
+    format!("{}", json)
 }
 
 #[actix_rt::main]
