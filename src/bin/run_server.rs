@@ -16,11 +16,10 @@ struct Params {
 
 
 #[derive(Serialize)]
-struct RestResponse<M> {
-    data: Option<M>,
+struct RestResponse<T> {
+    data: Option<T>,
     errors: Vec<String>,
 }
-
 
 async fn read_post_handler(params: web::Path<Params>) -> impl Responder {
     let id = params.id;
@@ -31,7 +30,7 @@ async fn read_post_handler(params: web::Path<Params>) -> impl Responder {
                 data: None,
                 errors: vec!["Not Found".to_string()],
             };
-            let json = serde_json::to_string_pretty(&response).unwrap();
+            let json = serde_json::to_string(&response).unwrap();
             format!("{}", json)
         }
         Some(post) => {
@@ -39,7 +38,7 @@ async fn read_post_handler(params: web::Path<Params>) -> impl Responder {
                 data: Some(post),
                 errors: vec![],
             };
-            let json = serde_json::to_string_pretty(&response).unwrap();
+            let json = serde_json::to_string(&response).unwrap();
             format!("{}", json)
         }
     }
@@ -49,7 +48,11 @@ async fn read_post_handler(params: web::Path<Params>) -> impl Responder {
 
 async fn read_posts_handler() -> impl Responder {
     let posts = db::read_posts();
-    let json = serde_json::to_string_pretty(&posts).unwrap();
+    let response = RestResponse::<Vec<db::models::Post>> {
+        data: Some(posts),
+        errors: vec![],
+    };
+    let json = serde_json::to_string_pretty(&response).unwrap();
     format!("{}", json)
 }
 
