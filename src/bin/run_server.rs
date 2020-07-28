@@ -56,11 +56,12 @@ async fn read_posts_handler() -> impl Responder {
     format!("{}", json)
 }
 
-async fn create_posts_handler(data: web::Json<db::models::NewPost>) -> impl Responder {
+async fn create_posts_handler(data: web::Json<db::models::PostInsertion>) -> impl Responder {
+
     // TODO return the new record if possible
     let _result = db::create_post(&data);
-    let response = RestResponse::<db::models::NewPost> {
-        data: Some(new_post),
+    let response = RestResponse::<db::models::PostInsertion> {
+        data: Some(data.into_inner()),
         errors: vec![],
     };
 

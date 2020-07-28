@@ -15,7 +15,7 @@ pub fn establish_connection() -> SqliteConnection {
         .unwrap_or_else(|_| panic!("Error connecting to {}", db))
 }
 
-pub fn create_post(new_post: &models::NewPost) {
+pub fn create_post(new_post: &models::PostInsertion) {
     let connection = establish_connection();
 
     diesel::insert_into(schema::posts::table)
