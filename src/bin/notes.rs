@@ -89,7 +89,6 @@ let rows_inserted = diesel::insert_into(users)
 
 assert_eq!(Ok(2), rows_inserted);
 
-//
 
 let updated_row = diesel::update(users.filter(id.eq(1)))
     .set(name.eq("James"))

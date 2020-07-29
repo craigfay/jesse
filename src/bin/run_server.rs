@@ -1,5 +1,5 @@
 
-use actix_web::{web, App, HttpRequest, HttpServer, Responder};
+use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 
 extern crate rust_json_api;
 
@@ -21,27 +21,28 @@ struct RestResponse<T> {
     errors: Vec<String>,
 }
 
-async fn read_post_handler(params: web::Path<Params>) -> impl Responder {
+async fn read_post_handler(params: web::Path<Params>) -> HttpResponse {
     let id = params.id;
     let post = db::read_post(id);
-    match post {
+    let response = match post {
         None => {
-            let response = RestResponse::<db::models::Post> {
+            RestResponse::<db::models::Post> {
                 data: None,
                 errors: vec!["Not Found".to_string()],
-            };
-            let json = serde_json::to_string(&response).unwrap();
-            format!("{}", json)
+            }
         }
         Some(post) => {
-            let response = RestResponse::<db::models::Post> {
+            RestResponse::<db::models::Post> {
                 data: Some(post),
                 errors: vec![],
-            };
-            let json = serde_json::to_string(&response).unwrap();
-            format!("{}", json)
+            }
         }
-    }
+    };
+
+    let json = serde_json::to_string(&response).unwrap();
+    HttpResponse::Ok()
+      .content_type("application/json")
+      .body(json)
 
 }
 
