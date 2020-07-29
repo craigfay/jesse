@@ -47,34 +47,39 @@ async fn read_post_handler(params: web::Path<Params>) -> HttpResponse {
 }
 
 
-async fn read_posts_handler() -> impl Responder {
+async fn read_posts_handler() -> HttpResponse {
     let posts = db::read_posts();
     let response = RestResponse::<Vec<db::models::Post>> {
         data: Some(posts),
         errors: vec![],
     };
     let json = serde_json::to_string(&response).unwrap();
-    format!("{}", json)
+    HttpResponse::Ok()
+      .content_type("application/json")
+      .body(json)
 }
 
-async fn create_posts_handler(data: web::Json<db::models::PostInsertion>) -> impl Responder {
+async fn create_posts_handler(data: web::Json<db::models::PostInsertion>) -> HttpResponse {
 
     // TODO return the new record if possible
+    // TODO this fails, not sure why
     let _result = db::create_post(&data);
+
     let response = RestResponse::<db::models::PostInsertion> {
         data: Some(data.into_inner()),
         errors: vec![],
     };
 
-    // TODO set "Content-Type" header
     let json = serde_json::to_string(&response).unwrap();
-    format!("{}", json)
+    HttpResponse::Ok()
+      .content_type("application/json")
+      .body(json)
 }
 
 async fn mutate_post_handler(
     path: web::Path<Params>,
     data: web::Json<db::models::PostMutation>
-) -> impl Responder {
+) -> HttpResponse {
     let id = path.id;
     let _result = db::mutate_post(id, &data);
 
@@ -87,7 +92,9 @@ async fn mutate_post_handler(
 
     // TODO set "Content-Type" header
     let json = serde_json::to_string(&response).unwrap();
-    format!("{}", json)
+    HttpResponse::Ok()
+      .content_type("application/json")
+      .body(json)
 }
 
 #[actix_rt::main]
