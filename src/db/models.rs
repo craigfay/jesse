@@ -26,6 +26,7 @@ pub struct PostInsertion {
 #[derive(Insertable)]
 #[derive(Serialize)]
 #[derive(Deserialize)]
+#[derive(AsChangeset)]
 #[table_name = "posts"]
 pub struct PostMutation {
     pub title: Option<String>,

@@ -70,6 +70,25 @@ async fn create_posts_handler(data: web::Json<db::models::PostInsertion>) -> imp
     format!("{}", json)
 }
 
+async fn mutate_post_handler(
+    path: web::Path<Params>,
+    data: web::Json<db::models::PostMutation>
+) -> impl Responder {
+    let id = path.id;
+    let _result = db::mutate_post(id, &data);
+
+    // TODO handle errors
+    // TODO return better response
+    let response = RestResponse::<db::models::PostMutation> {
+        data: Some(data.into_inner()),
+        errors: vec![],
+    };
+
+    // TODO set "Content-Type" header
+    let json = serde_json::to_string(&response).unwrap();
+    format!("{}", json)
+}
+
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
     let addr = "127.0.0.1:8000";
@@ -85,13 +104,14 @@ async fn main() -> std::io::Result<()> {
                     web::get().to(read_post_handler))
                 .route("/posts.json",
                     web::post().to(create_posts_handler))
+                .route("/posts/{id}.json",
+                    web::put().to(mutate_post_handler))
         )
 
     })
     .bind(&addr)?
     .run()
     .await
-
 }
 
 

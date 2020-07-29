@@ -23,6 +23,15 @@ pub fn create_post(new_post: &models::PostInsertion) {
         .execute(&connection);
 }
 
+pub fn mutate_post(id: i32, mutation: &models::PostMutation) {
+    let connection = establish_connection();
+    diesel::update(
+        schema::posts::table.filter(schema::posts::id.eq(id))
+    )
+        .set(mutation)
+        .execute(&connection);
+}
+
 pub fn read_post(id: i32) -> Option<models::Post> {
     let connection = establish_connection();
     let result = schema::posts::table
