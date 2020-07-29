@@ -1,9 +1,8 @@
 
-use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 
 extern crate rust_json_api;
 
-
+use actix_web::{web, App, HttpResponse, HttpServer};
 use rust_json_api::db;
 use serde_json;
 use serde::{Serialize, Deserialize};
@@ -90,7 +89,6 @@ async fn mutate_post_handler(
         errors: vec![],
     };
 
-    // TODO set "Content-Type" header
     let json = serde_json::to_string(&response).unwrap();
     HttpResponse::Ok()
       .content_type("application/json")
