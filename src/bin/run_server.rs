@@ -61,15 +61,21 @@ async fn read_posts_handler() -> HttpResponse {
 async fn create_posts_handler(data: web::Json<db::models::PostInsertion>) -> HttpResponse {
 
     // TODO return the new record if possible
-    // TODO this fails, not sure why
-    let _result = db::create_post(&data);
+    let result = db::create_post(&data);
 
-    let response = RestResponse::<db::models::PostInsertion> {
-        data: Some(data.into_inner()),
-        errors: vec![],
+    let response = match result {
+        Ok(_) => RestResponse::<db::models::PostInsertion> {
+            data: Some(data.into_inner()),
+            errors: vec![],
+        },
+        Err(message) => RestResponse::<db::models::PostInsertion> {
+            data: None,
+            errors: vec![message.to_string()],
+        },
     };
 
     let json = serde_json::to_string(&response).unwrap();
+    //TODO Handle responses that are not ok
     HttpResponse::Ok()
       .content_type("application/json")
       .body(json)
