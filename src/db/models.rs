@@ -1,6 +1,19 @@
 use super::schema::posts;
 use serde::{Serialize, Deserialize};
+use diesel::Insertable;
+use diesel::query_builder::AsChangeset;
 
+pub trait ModelInsertion<'a, M>:
+Insertable<M>
++ Serialize
++ Deserialize<'a>
++ AsChangeset {
+}
+
+pub struct Model {
+    name: String,
+    //insertable: dyn ModelInsertion<Model>,
+}
 
 #[derive(Debug)]
 #[derive(Clone)]
