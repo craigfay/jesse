@@ -39,9 +39,10 @@ async fn read_post_handler(params: web::Path<Params>) -> HttpResponse {
     };
 
     let json = serde_json::to_string(&response).unwrap();
+
     HttpResponse::Ok()
-      .content_type("application/json")
-      .body(json)
+        .content_type("application/json")
+        .body(json)
 
 }
 
@@ -53,9 +54,10 @@ async fn read_posts_handler() -> HttpResponse {
         errors: vec![],
     };
     let json = serde_json::to_string(&response).unwrap();
+
     HttpResponse::Ok()
-      .content_type("application/json")
-      .body(json)
+        .content_type("application/json")
+        .body(json)
 }
 
 async fn create_posts_handler(data: web::Json<db::models::PostInsertion>) -> HttpResponse {
@@ -75,10 +77,11 @@ async fn create_posts_handler(data: web::Json<db::models::PostInsertion>) -> Htt
     };
 
     let json = serde_json::to_string(&response).unwrap();
+
     //TODO Handle responses that are not ok
     HttpResponse::Ok()
-      .content_type("application/json")
-      .body(json)
+        .content_type("application/json")
+        .body(json)
 }
 
 async fn mutate_post_handler(
@@ -97,8 +100,8 @@ async fn mutate_post_handler(
 
     let json = serde_json::to_string(&response).unwrap();
     HttpResponse::Ok()
-      .content_type("application/json")
-      .body(json)
+        .content_type("application/json")
+        .body(json)
 }
 
 #[actix_rt::main]
