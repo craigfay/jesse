@@ -17,19 +17,18 @@ pub struct Model {
 
 pub trait Resource {
     type Insertable;
-    fn name() -> String;
 }
 
-pub struct Book {}
+
+pub struct Book;
 
 impl Resource for Book {
-    type Insertable = bool;
-
-    fn name() -> String {
-        "Book".to_string()
-    }
+    type Insertable = BookInsertion;
 }
 
+pub struct BookInsertion {
+    pub title: String,
+}
 
 #[derive(Debug)]
 #[derive(Clone)]

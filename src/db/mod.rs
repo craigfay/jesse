@@ -16,8 +16,8 @@ pub fn establish_connection() -> SqliteConnection {
         .unwrap_or_else(|_| panic!("Error connecting to {}", db))
 }
 
-pub fn create<M: models::Resource>() -> bool {
-    M::name() == "Book"
+pub fn create<M: models::Resource>(insertable: M::Insertable) -> bool {
+    true
 }
 
 pub fn create_post(new_post: &models::PostInsertion) -> Result<usize, &'static str>{
