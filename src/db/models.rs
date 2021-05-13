@@ -15,6 +15,22 @@ pub struct Model {
     //insertable: dyn ModelInsertion<Model>,
 }
 
+pub trait Resource {
+    type Insertable;
+    fn name() -> String;
+}
+
+pub struct Book {}
+
+impl Resource for Book {
+    type Insertable = bool;
+
+    fn name() -> String {
+        "Book".to_string()
+    }
+}
+
+
 #[derive(Debug)]
 #[derive(Clone)]
 #[derive(Queryable)]
